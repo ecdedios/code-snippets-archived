@@ -212,3 +212,95 @@ data.loc[data['first_name'].isin(['Ednalyn', 'Ederlyne', 'Edelyn'])]
 data.loc[data['email'].str.endswith("gmail.com") & (data['first_name'] == 'Ednalyn')] 
  
 # select rows with id column between 100 and 200, and just return 'zip' and 'web' columns
+
+
+
+# *************************************************
+# SELECTING COLUMNS
+# *************************************************
+
+dfx = df[['column_name',
+          '',
+          '',
+          '',
+          ''
+        ]]
+
+
+
+
+# *************************************************
+# DROPPING NULL VALUES
+# *************************************************
+
+df = df.dropna()
+
+
+
+# *************************************************
+# RENAMING COLUMNS
+# *************************************************
+
+df = df.rename(columns={'old_name':'new_name',
+                        '':'',
+                        '':'',
+                        '':'',
+                        '':''
+                        })
+
+
+
+# *************************************************
+# DROPPING DUPLICATES
+# *************************************************
+
+# drops duplicate values in column id
+dfx = df.drop_duplicates(subset ="column_id", keep = False) 
+
+
+
+# *************************************************
+# SELECTING NON-NULL VALUES
+# *************************************************
+
+dfx = df.loc[df['column_name'].notnull()]
+
+
+
+# *************************************************
+# VALUE COUNTS
+# *************************************************
+
+labels = pd.concat([df.rating.value_counts(),
+                    df.rating.value_counts(normalize=True)], axis=1)
+labels.columns = ['n', 'percent']
+labels
+
+
+
+# *************************************************
+# SHAPE AND LENGTH
+# *************************************************
+
+df.shape
+len(some_list)
+
+
+
+# *************************************************
+# INFO AND DESCRIBE
+# *************************************************
+
+df.info()
+df.describe
+
+
+
+# *************************************************
+# MERGING DATAFRAMES
+# *************************************************
+
+df_merged = df1.merge(df2,
+                      left_on='id1',
+                      right_on='id2',
+                      suffixes=('_left', '_right'))
