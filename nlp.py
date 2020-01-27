@@ -149,3 +149,66 @@ def read_data(input_folder):
 
 input_folder = 'G:/path/to/data/parent_folder_name'
 input_df = read_data(input_folder)
+
+
+
+# *************************************************
+# DISPLAY THE FIRST AND LAST 5 ROWS OF A DATAFRAME
+# *************************************************
+
+df.head()
+df.tail()
+
+
+
+# *************************************************
+# DISPLAY THE FIRST 10 ITEMS OF A LIST
+# *************************************************
+
+my_list[:10]
+
+
+
+
+# *************************************************
+# USE ILOC TO SELECT ROWS
+# *************************************************
+
+# Single selections using iloc and DataFrame
+
+# Rows:
+data.iloc[0] # first row of data frame (Aleshia Tomkiewicz) - Note a Series data type output.
+data.iloc[1] # second row of data frame (Evan Zigomalas)
+data.iloc[-1] # last row of data frame (Mi Richan)
+
+# Columns:
+data.iloc[:,0] # first column of data frame (first_name)
+data.iloc[:,1] # second column of data frame (last_name)
+data.iloc[:,-1] # last column of data frame (id)
+
+# Multiple row and column selections using iloc and DataFrame
+
+data.iloc[0:5] # first five rows of dataframe
+data.iloc[:, 0:2] # first two columns of data frame with all rows
+data.iloc[[0,3,6,24], [0,5,6]] # 1st, 4th, 7th, 25th row + 1st 6th 7th columns.
+data.iloc[0:5, 5:8] # first 5 rows and 5th, 6th, 7th columns of data frame (county -> phone1).
+
+
+
+# *************************************************
+# USE LOC TO SELECT ROWS
+# *************************************************
+
+# Select rows with first name Ednalyn, include all columns between 'city' and 'email'
+data.loc[data['first_name'] == 'Ednalyn', 'city':'email']
+ 
+# Select rows where the email column ends with 'gmail.com', include all columns
+data.loc[data['email'].str.endswith("gmail.com")]   
+ 
+# Select rows with first_name equal to some values, all columns
+data.loc[data['first_name'].isin(['Ednalyn', 'Ederlyne', 'Edelyn'])]   
+       
+# Select rows with first name Ednalyn and gmail email addresses
+data.loc[data['email'].str.endswith("gmail.com") & (data['first_name'] == 'Ednalyn')] 
+ 
+# select rows with id column between 100 and 200, and just return 'zip' and 'web' columns
