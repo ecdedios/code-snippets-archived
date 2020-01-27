@@ -1,58 +1,75 @@
-# HEADER
+# -*- coding: utf-8 -*-
+"""
 
-    # -*- coding: utf-8 -*-
-    """
+Filename: name_iteration_keyword.ipynb
 
-    Filename: name_iteration_keyword.ipynb
+Author:   Ednalyn C. De Dios
+Phone:    (210) 236-2685
+Email:    ednalyn.dedios@taskus.com 
 
-    Author:   Ednalyn C. De Dios
-    Phone:    (210) 236-2685
-    Email:    ednalyn.dedios@taskus.com 
+Created:  January 00, 2020
+Updated:  January 00, 2020
 
-    Created:  January 00, 2020
-    Updated:  January 00, 2020
+PURPOSE: describe the purpose of this script.
 
-    PURPOSE: describe the purpose of this script.
+PREREQUISITES: list any prerequisites or
+assumptions here.
 
-    PREREQUISITES: list any prerequisites or
-    assumptions here.
+DON'T FORGET TO:
+1. Action item.
+2. Another action item.
+3. Last action item.
 
-    DON'T FORGET TO:
-    1. Action item.
-    2. Another action item.
-    3. Last action item.
+"""
 
-    """
 
-# ENVIRONMENT
 
-    # for reading files from the local machine
-    import os
 
-    # for manipulating dataframes
-    import pandas as pd
-    import numpy as np
 
-    # natural language processing
-    import re
-    import unicodedata
-    import nltk
-    nltk.download('stopwords')
-    nltk.download('wordnet')
-    from nltk.corpus import stopwords
+# for reading files from the local machine
+import os
 
-    # add appropriate words that will be ignored in the analysis
-    ADDITIONAL_STOPWORDS = ['campaign']
+# for manipulating dataframes
+import pandas as pd
+import numpy as np
 
-    # visualization
-    %matplotlib inline
-    import matplotlib.pyplot as plt
-    import seaborn as sns
+# natural language processing
+import re
+import unicodedata
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
+from nltk.corpus import stopwords
 
-    # to print out all the outputs
-    from IPython.core.interactiveshell import InteractiveShell
-    InteractiveShell.ast_node_interactivity = "all"
+# add appropriate words that will be ignored in the analysis
+ADDITIONAL_STOPWORDS = ['campaign']
 
-    # to print out all the columns and rows
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
+# visualization
+%matplotlib inline
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# to print out all the outputs
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = "all"
+
+# to print out all the columns and rows
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
+
+
+def clean(text):
+  """
+  A simple function to clean up the data. All the words that
+  are not designated as a stop word is then lemmatized after
+  encoding and basic regex parsing are performed.
+  """
+  wnl = nltk.stem.WordNetLemmatizer()
+  stopwords = nltk.corpus.stopwords.words('english') + ADDITIONAL_STOPWORDS
+  text = (unicodedata.normalize('NFKD', text)
+    .encode('ascii', 'ignore')
+    .decode('utf-8', 'ignore')
+    .lower())
+  words = re.sub(r'[^\w\s]', '', text).split()
+  return [wnl.lemmatize(word) for word in words if word not in stopwords]
