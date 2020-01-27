@@ -304,3 +304,154 @@ df_merged = df1.merge(df2,
                       left_on='id1',
                       right_on='id2',
                       suffixes=('_left', '_right'))
+
+
+
+# *************************************************
+# WORKING WITH TIMESTAMPS
+# *************************************************
+
+df.timestamp[:1]
+
+dtz = []
+for ts in df.timestamp:
+  dtz.append(parse(ts))
+dtz[:10]
+
+df['date_time_zone'] = df.apply(lambda row: parse(row.timestamp), axis=1)
+
+df.set_index('date_time_zone', inplace=True)
+
+
+
+# *************************************************
+# DESIGNATING CSAT AND DSAT
+# *************************************************
+
+# creates a new column and designates a row as either high or low
+df['csat'] = np.where(df['rating']>=3, 'high', 'low')
+
+
+
+# *************************************************
+# SPLITTING CSAT AND DSAT
+# *************************************************
+
+df_positive =  df.loc[df['column_name'] == 'positive']
+df_negative =  df.loc[df['column_name'] == 'negative']
+
+
+
+# *************************************************
+# TRANSFORMING DF COLUMN INTO A LIST OF CLEAN WORDS
+# *************************************************
+
+my_list = df.column.tolist()
+my_words = clean(''.join(str(good_list)))
+
+
+
+# *************************************************
+# N-GRAMS RANKING
+# *************************************************
+
+def get_words(df,column):
+    """
+    Takes in a dataframe and columns and returns a list of
+    words from the values in the specified column.
+    """
+    return clean(''.join(str(df[column].tolist())))
+
+def get_unigrams(words):
+    """
+    Takes in a list of words and returns a series of
+    unigrams with value counts.
+    """
+    return  pd.Series(words).value_counts()
+
+def get_bigrams(words):
+    """
+    Takes in a list of words and returns a series of
+    bigrams with value counts.
+    """
+    return (pd.Series(nltk.ngrams(words, 2)).value_counts())[:20]
+
+def get_trigrams(words):
+    """
+    Takes in a list of words and returns a series of
+    trigrams with value counts.
+    """
+    return (pd.Series(nltk.ngrams(words, 3)).value_counts())[:20]
+
+def get_qualgrams(words):
+    """
+    Takes in a list of words and returns a series of
+    qualgrams with value counts.
+    """
+    return (pd.Series(nltk.ngrams(words, 4)).value_counts())[:20]
+
+def get_ngrams(df,column):
+    """
+    Takes in a dataframe with column name and generates a
+    dataframe of unigrams, bigrams, trigrams, and qualgrams.
+    """
+    return get_bigrams(get_words(df,column)).to_frame().reset_index().rename(columns={'index':'bigram','0':'count'}), \
+           get_trigrams(get_words(df,column)).to_frame().reset_index().rename(columns={'index':'trigram','0':'count'}), \
+           get_qualgrams(get_words(df,column)).to_frame().reset_index().rename(columns={'index':'qualgram','0':'count'})
+
+
+
+# *************************************************
+# N-GRAMS VIZ
+# *************************************************
+
+def viz_bigrams(df,column):
+    get_bigrams(get_words(df,column)).sort_values().plot.barh(color='blue', width=.9, figsize=(12, 8))
+
+    plt.title('20 Most Frequently Occuring Bigrams')
+    plt.ylabel('Bigram')
+    plt.xlabel('# Occurances')
+
+    ticks, _ = plt.yticks()
+    labels = get_bigrams(get_words(df,column)).reset_index()['index'].apply(lambda t: t[0] + ' ' + t[1]).iloc[::-1]
+    _ = plt.yticks(ticks, labels)
+
+def viz_trigrams(df,column):
+    get_trigrams(get_words(df,column)).sort_values().plot.barh(color='blue', width=.9, figsize=(12, 8))
+
+    plt.title('20 Most Frequently Occuring Trigrams')
+    plt.ylabel('Trigram')
+    plt.xlabel('# Occurances')
+
+    ticks, _ = plt.yticks()
+    labels = get_trigrams(get_words(df,column)).reset_index()['index'].apply(lambda t: t[0] + ' ' + t[1] + ' ' + t[2]).iloc[::-1]
+    _ = plt.yticks(ticks, labels)
+    
+def viz_qualgrams(df,column):
+    get_bigrams(get_words(df,column)).sort_values().plot.barh(color='blue', width=.9, figsize=(12, 8))
+
+    plt.title('20 Most Frequently Occuring Qualgrams')
+    plt.ylabel('Qualgram')
+    plt.xlabel('# Occurances')
+
+    ticks, _ = plt.yticks()
+    labels = get_qualgrams(get_words(df,column)).reset_index()['index'].apply(lambda t: t[0] + ' ' + t[1] + ' ' + t[2] + ' ' + t[3] ).iloc[::-1]
+    _ = plt.yticks(ticks, labels)
+
+
+
+# *************************************************
+# MANUAL CRITERIA SEARCH
+# *************************************************
+
+# Create an empty list 
+overall_criteria_list =[] 
+
+for index, row in df.iterrows():
+    if ('term1' in row['column_name'] and 'term2' in row['column_name']):
+        overall_criteria_list .append([row.column1,
+                                        row.column2,
+                                        row.column3,
+                                        row.column4,
+                                        row.column5
+                                        ])
