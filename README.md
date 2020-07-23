@@ -1,6 +1,3 @@
-_A referential project._
---
-
 # Dd's Code Snippets
 > A simple repo to hold all my favorite code snippets for quick reference.
 
